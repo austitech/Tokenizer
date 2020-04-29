@@ -73,12 +73,11 @@ class StringTokenizer:
         """returns single character tokens"""
         return Token(self.tokentype[character], character)
 
-    def generate_token_list(self):
+    def create_token_generator(self):
         """
             move through the text and generates a list of tokens
             return token_list:list
         """
-        token_list = []
         while self.current_char is not None:
             # handle whitespaces
             if self.current_char.isspace():
@@ -87,18 +86,18 @@ class StringTokenizer:
 
             # handle integer and float numbers
             if self.current_char.isdigit():
-                token_list.append(self.number())
+                yield self.number()
                 continue
 
             # handle identifiers e.g variable names
             if self.current_char.isalpha():
-                token_list.append(self.identifier())
+                yield self.identifier()
                 continue
 
             # handle strings e.g "Hello, World"
             if self.current_char == '"':
                 self.advance()  # skip opening quote
-                token_list.append(self.string())
+                yield self.string()
                 self.advance()  # skip closing quote
                 continue
 
@@ -106,9 +105,7 @@ class StringTokenizer:
             if self.current_char in self.tokentype.keys():
                 char = self.current_char
                 self.advance()
-                token_list.append(self.generic_token(char))
+                yield self.generic_token(char)
                 continue
         # add token to indicate end of file (EOF)
-        token_list.append(Token(self.tokentype['EOF'], None))
-
-        return token_list
+        yield Token(self.tokentype['EOF'], None)

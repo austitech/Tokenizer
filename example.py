@@ -6,6 +6,6 @@ text = open('test.ex', 'r').read()
 
 t = StringTokenizer(text=text, tokentype=tokentype)
 
-token_list = t.generate_token_list()
+token_generator = t.create_token_generator()
 
-print(token_list)
+print(token_generator)
