@@ -5,7 +5,7 @@ This repository contains 3 modules:
 + example
 
 ## tokenizer module
-class StringTokenizer
+class StringTokenizer  
 params:
 -   text: String to break into tokens
 -   tokentypes: Dictionary of token names
@@ -15,7 +15,7 @@ the most important method is create_token_generator; builds and returns
 a generator object which yields the tokens when needed.
 
 ## token module
-class Token
+class Token  
 params:
 -   type: Name of token
 -   value: token value
