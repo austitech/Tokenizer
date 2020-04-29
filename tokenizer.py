@@ -1,10 +1,12 @@
 
-from token import Token, tokentype
+from token import Token
 
 
 class StringTokenizer:
-    def __init__(self, text=''):
+    def __init__(self, text='', tokentype=None, keyword=None):
         self.text = text
+        self.tokentype = tokentype
+        self.keyword = keyword
         self.pos = 0  # act as a cursor within self.text
         self.current_char = self.text[self.pos]
 
@@ -42,8 +44,8 @@ class StringTokenizer:
         if self.current_char == '.':
             self.advance()
             floating = float(str(integer) + str(self.get_integer()))
-            return Token(tokentype['FLOAT'], floating)
-        return Token(tokentype['INT'], integer)
+            return Token(self.tokentype['FLOAT'], floating)
+        return Token(self.tokentype['INT'], integer)
 
     def identifier(self):
         """recognizes and returns an identifier token"""
@@ -54,7 +56,7 @@ class StringTokenizer:
                     self.current_char.isalnum():
                         _id += self.current_char
                         self.advance()
-        return Token(tokentype['ID'], _id)
+        return Token(self.tokentype['ID'], _id)
 
     def string(self):
         """recognizes and returns a string token"""
@@ -64,12 +66,12 @@ class StringTokenizer:
             self.advance()
         # return CHARACTER token if length of string is less than 2
         if len(_string) == 1:
-            return Token(tokentype['CHAR'], _string)
-        return Token(tokentype['STRING'], _string)
+            return Token(self.tokentype['CHAR'], _string)
+        return Token(self.tokentype['STRING'], _string)
 
     def generic_token(self, character):
         """returns single character tokens"""
-        return Token(tokentype[character], character)
+        return Token(self.tokentype[character], character)
 
     def generate_token_list(self):
         """
@@ -101,12 +103,12 @@ class StringTokenizer:
                 continue
 
             # handle single characters e.g symbols
-            if self.current_char in tokentype.keys():
+            if self.current_char in self.tokentype.keys():
                 char = self.current_char
                 self.advance()
                 token_list.append(self.generic_token(char))
                 continue
         # add token to indicate end of file (EOF)
-        token_list.append(Token(tokentype['EOF'], None))
+        token_list.append(Token(self.tokentype['EOF'], None))
 
         return token_list
